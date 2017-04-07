@@ -1,0 +1,238 @@
+<div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a
+
+    >co-prompt (v1.0.0)</a>
+</h1>
+<h4>simple terminal user input 'co'</h4>
+<div class="apidocSectionDiv"><a
+    href="#apidoc.tableOfContents"
+    id="apidoc.tableOfContents"
+><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.co-prompt">module co-prompt</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.co-prompt.confirm">
+            function <span class="apidocSignatureSpan">co-prompt.</span>confirm
+            <span class="apidocSignatureSpan">(msg)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.co-prompt.multiline">
+            function <span class="apidocSignatureSpan">co-prompt.</span>multiline
+            <span class="apidocSignatureSpan">(msg)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.co-prompt.password">
+            function <span class="apidocSignatureSpan">co-prompt.</span>password
+            <span class="apidocSignatureSpan">(msg, mask)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.co-prompt" id="apidoc.module.co-prompt">module co-prompt</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.co-prompt.confirm" id="apidoc.element.co-prompt.confirm">
+        function <span class="apidocSignatureSpan">co-prompt.</span>confirm
+        <span class="apidocSignatureSpan">(msg)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">confirm = function (msg){
+  return function(done){
+    prompt(msg)(function(err, val){
+      if (err) return done(err);
+      done(null, bool(val));
+    });
+  }
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+Prompt for password input with `msg` and optional `mask`
+defaulting to &#x22;*&#x22;.
+
+### prompt.multiline(msg)
+
+Prompt for multi-line input with `msg`.
+
+### prompt.<span class="apidocCodeKeywordSpan">confirm</span>(msg)
+
+Prompt for confirmation with `msg`.
+
+## License
+
+MIT
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.co-prompt.multiline" id="apidoc.element.co-prompt.multiline">
+        function <span class="apidocSignatureSpan">co-prompt.</span>multiline
+        <span class="apidocSignatureSpan">(msg)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">multiline = function (msg){
+  return function(done){
+    var buf = [];
+    console.log(msg);
+    process.stdin.setEncoding(&#x27;utf8&#x27;);
+    process.stdin.on(&#x27;data&#x27;, function(val){
+      if (&#x27;\n&#x27; == val || &#x27;\r\n&#x27; == val) {
+        process.stdin.removeAllListeners(&#x27;data&#x27;);
+        done(null, buf.join(&#x27;\n&#x27;));
+      } else {
+        buf.push(val.trimRight());
+      }
+    }).resume();
+  }
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+Prompt for user input with `msg`.
+
+### prompt.password(msg, [mask])
+
+Prompt for password input with `msg` and optional `mask`
+defaulting to &#x22;*&#x22;.
+
+### prompt.<span class="apidocCodeKeywordSpan">multiline</span>(msg)
+
+Prompt for multi-line input with `msg`.
+
+### prompt.confirm(msg)
+
+Prompt for confirmation with `msg`.
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.co-prompt.password" id="apidoc.element.co-prompt.password">
+        function <span class="apidocSignatureSpan">co-prompt.</span>password
+        <span class="apidocSignatureSpan">(msg, mask)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">password = function (msg, mask){
+  mask = null == mask ? &#x27;*&#x27; : mask;
+  return function(done){
+    var buf = &#x27;&#x27;;
+
+    keypress(process.stdin);
+    process.stdin.setRawMode(true);
+    process.stdout.write(msg);
+
+    process.stdin.on(&#x27;keypress&#x27;, function(c, key){
+      if (key &#x26;&#x26; &#x27;return&#x27; == key.name) {
+        console.log();
+        process.stdin.pause();
+        process.stdin.removeAllListeners(&#x27;keypress&#x27;);
+        process.stdin.setRawMode(false);
+        if (!buf.trim().length) return exports.password(msg, mask)(done);
+        done(null, buf);
+        return;
+      }
+
+      if (key &#x26;&#x26; key.ctrl &#x26;&#x26; &#x27;c&#x27; == key.name) {
+        console.log(&#x27;%s&#x27;, buf);
+        process.exit();
+      }
+
+      process.stdout.write(mask);
+      buf += c;
+    }).resume();
+  }
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+## API
+
+### prompt(msg)
+
+Prompt for user input with `msg`.
+
+### prompt.<span class="apidocCodeKeywordSpan">password</span>(msg, [mask])
+
+Prompt for password input with `msg` and optional `mask`
+defaulting to &#x22;*&#x22;.
+
+### prompt.multiline(msg)
+
+Prompt for multi-line input with `msg`.
+...</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
