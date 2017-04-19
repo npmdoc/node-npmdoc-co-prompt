@@ -61,6 +61,15 @@
 
         <li>
 
+            <a class="apidocElementLiA" href="#apidoc.element.co-prompt.co-prompt">
+            function <span class="apidocSignatureSpan"></span>co-prompt
+            <span class="apidocSignatureSpan">(msg)</span>
+            </a>
+
+        </li>
+
+        <li>
+
             <a class="apidocElementLiA" href="#apidoc.element.co-prompt.confirm">
             function <span class="apidocSignatureSpan">co-prompt.</span>confirm
             <span class="apidocSignatureSpan">(msg)</span>
@@ -92,6 +101,27 @@
 
 <div class="apidocSectionDiv">
 <h1><a href="#apidoc.module.co-prompt" id="apidoc.module.co-prompt">module co-prompt</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.co-prompt.co-prompt" id="apidoc.element.co-prompt.co-prompt">
+        function <span class="apidocSignatureSpan"></span>co-prompt
+        <span class="apidocSignatureSpan">(msg)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function prompt(msg){
+  return function(done){
+    process.stdout.write(msg);
+    process.stdin.setEncoding(&#x27;utf8&#x27;);
+    process.stdin.once(&#x27;data&#x27;, function(val){
+      done(null, val.trim());
+    }).resume();
+  }
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
 
 
     <h2>
